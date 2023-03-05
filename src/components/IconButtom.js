@@ -7,12 +7,12 @@ import { images } from "../images";
 //<Image>컴포넌트 => 이미지 파일의 경로나 url를 이용하여 이미지를 렌더링 할 수 있음
 //tint-color => 아이콘 색상
 const Icon = styled.Image`
-    tint-color: ${({ theme }) => theme.text}; 
+    tint-color: ${({ theme, completed }) => completed ? theme.done : theme.text}; 
     width: 30px;
     height: 30px;
     margin: 10px;
     `
-const IconButton = ({ type, onPressOut, id }) => {
+const IconButton = ({ type, onPressOut, id, completed }) => {
     
     //현재 할일목록의 id
     const _onPressOut = () => {
@@ -21,11 +21,15 @@ const IconButton = ({ type, onPressOut, id }) => {
 
     return (
         <TouchableOpacity onPressOut={_onPressOut}>
-            <Icon source={type}/>
+            <Icon
+                source={type}
+                completed={completed}
+            />
         </TouchableOpacity>
     )
 }
 
+//props로 onpressOut이 전달되지 않아도 문제가 안생기도록 onPressOut의 기본값 지정
 IconButton.defailtProps = {
     onPressOut: () => {},
 }
@@ -35,6 +39,8 @@ IconButton.propTypes = {
     type: PropTypes.oneOf(Object.values(images)).isRequired,
     onPressOut: PropTypes.func,
     id: PropTypes.string,
+    completed: PropTypes.bool,
+
 }
 
 export default IconButton;

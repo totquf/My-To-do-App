@@ -52,9 +52,30 @@ const App = () => {
 
     //할일 삭제          //id => 현재 onPress가 일어난 할일목록의 id값이 들어옴
     const _deleteTask = (id) => {
-        //tasks의 속성들을 빈 객체에 넣음(깊은복사, 메모리주소공유)
+        //tasks의 속성(키+값)들을 빈 객체에 깊은복사(메모리주소공유)
+        //currentTask = '1': { id: '1', text: '가나다라', completed: false} * N
         const currentTask = Object.assign({}, tasks);
+        //currentTask의 리스트 중에서 받아온 id값과 일치하는 key를 가진 항목을 삭제
         delete currentTask[id]
+        setTasks(currentTask)
+    }
+
+    //할일 완료
+    const _toggleTask = (id) => {
+        //tasks의 속성(키+값)들을 빈 객체에 깊은복사(메모리주소공유)
+        const currentTask = Object.assign({}, tasks);
+        //currentTask리스트중 받아온 id값과 일치하는 key값의 value에 접근, value값중 completed라는 key의 항목에 접근
+        //그 값을 반대로 바꿈(false->true / true->false)
+        currentTask[id]['completed'] = !currentTask[id]['completed']
+        setTasks(currentTask)
+    }
+
+    //할일수정           //item에 들어오는 값 = { id: '1', text: 사용자가 수정한 text, completed: false}
+    const _updateTask = (item) => {
+        //tasks의 속성(키+값)들을 빈 객체에 깊은복사(메모리주소공유)
+        const currentTask = Object.assign({}, tasks)
+        //currentTask의 리스트 중 item.id로 받아온 값과 일치하는 key의 value값을 item으로 교체
+        currentTask[item.id] = item
         setTasks(currentTask)
     }
 
@@ -83,7 +104,10 @@ const App = () => {
                                 item={item}
                                 key={item.id}
                                 text={item.text}
-                                deleteTask={_deleteTask} />
+                                deleteTask={_deleteTask}
+                                toggleTask={_toggleTask}
+                                updateTask={_updateTask}
+                            />
                         )
                     }
                 </List>
